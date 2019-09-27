@@ -6,14 +6,58 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Server extends Thread {
 
     private ServerSocket serverSocket;
+    private Connection conn = null;
 
     Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(15000);
+
+        populateDatabase();
+    }
+
+    private void populateDatabase() {
+        try {
+            connectToDatabase();
+            createTables();
+        } catch (SQLException e) {
+            System.err.println("An error occurred " + e);
+        }
+
+    }
+
+    private void createTables() throws SQLException {
+        Statement statement = conn.createStatement();
+        statement.executeUpdate("CREATE TABLE CUSTOMERS(custNumber INT PRIMARY  KEY AUTOINCREMENT," +
+                "firstName VARCHAR(155), surname VARCHAR(155), idNum INT, phoneNum INT, canRent BOOL)");
+        statement.executeUpdate("CREATE TABLE VEHICLES(vehNumber INT PRIMARY KEY AUTOINCREMENT, make VARCHAR(155), " +
+                "category VARCHAR(155), rentalPrice FLOAT, availableForRent BOOL)");
+        statement.executeUpdate("CREATE TABLE RENTALS(rentalNumber INT PRIMARY KEY , " +
+                "dateRental VARCHAR(155), dateReturned VARCHAR(155), pricePerDay FLOAT," +
+                "totalRental FLOAT,custNumber INT FOREIGN KEY, vehNumber INT FOREIGN KEY)");
+    }
+
+    private void connectToDatabase() throws SQLException {
+        String dbURL = "jdbc:ucanaccess://src\\car_rentals.accdb";
+        conn = DriverManager.getConnection(dbURL);
+        System.out.println("Connection to database successful");
+    }
+
+    private void closeConnection() {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println("An error occurred: " + e);
+            }
+        }
     }
 
     @Override
@@ -33,9 +77,11 @@ public class Server extends Thread {
                 out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress());
             } catch (SocketTimeoutException s) {
                 System.out.println("Socket timed out");
+                closeConnection();
                 break;
             } catch (IOException e) {
                 System.out.printf("An error occurred: %s%n", e);
+                closeConnection();
             }
         }
     }
