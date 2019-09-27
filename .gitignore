@@ -1,5 +1,5 @@
 
 .gitignore
 .idea/artifacts/
-.idea/
-out/
+/.idea
+/out
