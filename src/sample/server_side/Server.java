@@ -35,13 +35,15 @@ public class Server extends Thread {
 
     private void createTables() throws SQLException {
         Statement statement = conn.createStatement();
-        statement.executeUpdate("CREATE TABLE CUSTOMERS(custNumber INT PRIMARY  KEY AUTOINCREMENT," +
-                "firstName VARCHAR(155), surname VARCHAR(155), idNum INT, phoneNum INT, canRent BOOL)");
-        statement.executeUpdate("CREATE TABLE VEHICLES(vehNumber INT PRIMARY KEY AUTOINCREMENT, make VARCHAR(155), " +
-                "category VARCHAR(155), rentalPrice FLOAT, availableForRent BOOL)");
-        statement.executeUpdate("CREATE TABLE RENTALS(rentalNumber INT PRIMARY KEY , " +
-                "dateRental VARCHAR(155), dateReturned VARCHAR(155), pricePerDay FLOAT," +
-                "totalRental FLOAT,custNumber INT FOREIGN KEY, vehNumber INT FOREIGN KEY)");
+        statement.executeUpdate("CREATE TABLE CUSTOMERS(custNumber AUTOINCREMENT PRIMARY KEY, " +
+                "firstName VARCHAR(155) NOT NULL, surname VARCHAR(155) NOT NULL, idNum INTEGER NOT NULL, phoneNum INTEGER NOT NULL, canRent BIT NOT NULL)");
+        statement.executeUpdate("CREATE TABLE VEHICLES(vehNumber AUTOINCREMENT PRIMARY KEY, make VARCHAR(155) NOT NULL, " +
+                "category VARCHAR(155) NOT NULL, rentalPrice FLOAT NOT NULL, availableForRent BIT NOT NULL)");
+        statement.executeUpdate("CREATE TABLE RENTALS(rentalNumber AUTOINCREMENT PRIMARY KEY, dateRental VARCHAR(155) NOT NULL, dateReturned VARCHAR(155) NOT NULL, " +
+                "pricePerDay FLOAT NOT NULL, totalRental FLOAT NOT NULL, custNumber INTEGER FOREIGN KEY REFERENCES CUSTOMERS(custNumber), " +
+                "vehNumber INTEGER FOREIGN KEY REFERENCES VEHICLES(vehNumber))");
+
+        System.out.println("Database populated");
     }
 
     private void connectToDatabase() throws SQLException {

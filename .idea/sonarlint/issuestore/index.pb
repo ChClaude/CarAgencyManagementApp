@@ -8,3 +8,21 @@ J
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+\
+,src/project_classes/RunCreateVehicleSer.java,9\6\969590a1a866c7b79c082bef0ce4465223652dc7
+F
+src/sample/Client.java,3\c\3c97e3c36b572d6b36bec7c998a6bd291a68e340
+]
+-src/project_classes/RunCreateCustomerSer.java,0\c\0c67b69cdd815f0253d29f09a16e15cc51ddf14f
+Z
+*src/project_classes/CreateCustomerSer.java,b\2\b280f039c386f08c9dffa859cc920a3b3d6845ef
+P
+ src/project_classes/Vehicle.java,8\1\81fff41df7270a34371705ec93857e09c385ad21
+Q
+!src/project_classes/Customer.java,8\b\8bc4d418d6bb3beb120db007c9219133e0d571f8
+U
+%src/sample/server_side/RunServer.java,0\1\012e2d2252c20e13cca23a1ff08440b98c39a746
+O
+src/project_classes/Rental.java,4\7\47c4d765df3daa6f6a662fe69508268860cdfcb8
+R
+"src/sample/server_side/Server.java,2\0\20684d9afd60609f4e1cb966a03b166bdef1c50b
