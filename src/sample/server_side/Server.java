@@ -1,11 +1,14 @@
 package sample.server_side;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import project_classes.Customer;
+import project_classes.Vehicle;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -27,23 +30,85 @@ public class Server extends Thread {
         try {
             connectToDatabase();
             createTables();
+            loadDataFromFiles();
         } catch (SQLException e) {
             System.err.println("An error occurred " + e);
         }
 
     }
 
+    private void loadDataFromFiles() {
+        try (ObjectInputStream customerInputStream = new ObjectInputStream(Files.newInputStream(
+                Paths.get("../Customers.ser")));
+
+             ObjectInputStream vehicleInputStream = new ObjectInputStream(Files.newInputStream(
+                     Paths.get("../Vehicles.ser")));
+             Statement statement = conn.createStatement()) {
+
+            getDataFromCustomerSeqFileToDb(customerInputStream, statement);
+            getDataFromVehicleSeqFileToDb(vehicleInputStream, statement);
+
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Data loaded from files to database");
+    }
+
+    private void getDataFromCustomerSeqFileToDb(ObjectInputStream customerInputStream, Statement statement) throws IOException, SQLException {
+        while (true) {
+            int columns = 0;
+            try {
+                // loading customers to database
+                Customer customer = (Customer) customerInputStream.readObject();
+
+                statement.executeUpdate("INSERT INTO CUSTOMERS(name, surname, idNum, phoneNum, canRent) " +
+                        "VALUES(" + customer.getName() + ", " + customer.getSurname() + ", " + customer.getIdNum()
+                        + ", " + customer.getPhoneNum() + ", " + customer.canRent() + ")");
+
+                columns++;
+            } catch (EOFException ex) {
+                System.out.println("End of file");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Class not found");
+            } finally {
+                System.out.println(columns + " affected in table CUSTOMERS.");
+            }
+        }
+    }
+
+    private void getDataFromVehicleSeqFileToDb(ObjectInputStream vehicleInputStream, Statement statement) throws IOException, SQLException {
+        int columns = 0;
+        while (true) {
+            try {
+                // loading vehicles to database
+                Vehicle vehicle = (Vehicle) vehicleInputStream.readObject();
+                statement.executeUpdate("INSERT INTO CUSTOMERS(make, category, rentalPrice, availableFor) " +
+                        "VALUES(" + vehicle.getMake() + ", " + vehicle.getCategory() + ", " + vehicle.getRentalPrice()
+                        + ", " + vehicle.isAvailableForRent() + ")");
+
+                columns++;
+            } catch (EOFException ex) {
+                System.out.println("End of file");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Class not found");
+            } finally {
+                System.out.println(columns + "affected in table VEHICLES.");
+            }
+        }
+    }
+
     private void createTables() throws SQLException {
         Statement statement = conn.createStatement();
+
         statement.executeUpdate("CREATE TABLE CUSTOMERS(custNumber AUTOINCREMENT PRIMARY KEY, " +
                 "firstName VARCHAR(155) NOT NULL, surname VARCHAR(155) NOT NULL, idNum INTEGER NOT NULL, phoneNum INTEGER NOT NULL, canRent BIT NOT NULL)");
         statement.executeUpdate("CREATE TABLE VEHICLES(vehNumber AUTOINCREMENT PRIMARY KEY, make VARCHAR(155) NOT NULL, " +
                 "category VARCHAR(155) NOT NULL, rentalPrice FLOAT NOT NULL, availableForRent BIT NOT NULL)");
         statement.executeUpdate("CREATE TABLE RENTALS(rentalNumber AUTOINCREMENT PRIMARY KEY, dateRental VARCHAR(155) NOT NULL, dateReturned VARCHAR(155) NOT NULL, " +
-                "pricePerDay FLOAT NOT NULL, totalRental FLOAT NOT NULL, custNumber INTEGER FOREIGN KEY REFERENCES CUSTOMERS(custNumber), " +
-                "vehNumber INTEGER FOREIGN KEY REFERENCES VEHICLES(vehNumber))");
+                "pricePerDay FLOAT NOT NULL, totalRental FLOAT NOT NULL, custNumber LONG FOREIGN KEY REFERENCES CUSTOMERS(custNumber), " +
+                "vehNumber LONG FOREIGN KEY REFERENCES VEHICLES(vehNumber))");
 
-        System.out.println("Database populated");
+        System.out.println("Database tables created");
     }
 
     private void connectToDatabase() throws SQLException {
