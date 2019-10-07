@@ -61,9 +61,7 @@ public class Server extends Thread {
                 // loading customers to database
                 Customer customer = (Customer) customerInputStream.readObject();
 
-                statement.executeUpdate("INSERT INTO CUSTOMERS(name, surname, idNum, phoneNum, canRent) " +
-                        "VALUES(" + customer.getName() + ", " + customer.getSurname() + ", " + customer.getIdNum()
-                        + ", " + customer.getPhoneNum() + ", " + customer.canRent() + ")");
+                insertCustomerToDb(statement, customer);
 
                 columns++;
             } catch (EOFException ex) {
@@ -82,9 +80,7 @@ public class Server extends Thread {
             try {
                 // loading vehicles to database
                 Vehicle vehicle = (Vehicle) vehicleInputStream.readObject();
-                statement.executeUpdate("INSERT INTO CUSTOMERS(make, category, rentalPrice, availableFor) " +
-                        "VALUES(" + vehicle.getMake() + ", " + vehicle.getCategory() + ", " + vehicle.getRentalPrice()
-                        + ", " + vehicle.isAvailableForRent() + ")");
+                insertVehicleToDb(statement, vehicle);
 
                 columns++;
             } catch (EOFException ex) {
@@ -95,6 +91,20 @@ public class Server extends Thread {
                 System.out.println(columns + "affected in table VEHICLES.");
             }
         }
+    }
+
+    // this method inserts a customer object to the database
+    private void insertCustomerToDb(Statement statement, Customer customer) throws SQLException {
+        statement.executeUpdate("INSERT INTO CUSTOMERS(name, surname, idNum, phoneNum, canRent) " +
+                "VALUES(" + customer.getName() + ", " + customer.getSurname() + ", " + customer.getIdNum()
+                + ", " + customer.getPhoneNum() + ", " + customer.canRent() + ")");
+    }
+
+    // this method inserts a vehicle object to the database
+    private void insertVehicleToDb(Statement statement, Vehicle vehicle) throws SQLException {
+        statement.executeUpdate("INSERT INTO VEHICLES(make, category, rentalPrice, availableFor) " +
+                "VALUES(" + vehicle.getMake() + ", " + vehicle.getCategory() + ", " + vehicle.getRentalPrice()
+                + ", " + vehicle.isAvailableForRent() + ")");
     }
 
     private void createTables() throws SQLException {
