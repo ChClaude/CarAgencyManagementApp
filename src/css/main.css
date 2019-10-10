@@ -10,6 +10,12 @@
     -fx-background-color: #7156DD;
 }
 
+.button:focused {
+    -fx-background-color: #7156DD;
+    -fx-border-color: #CDD1D6;
+    -fx-border-width: 0px 0px 0px 3px;
+}
+
 .table-view .column-header,
 .table-view .column-header-background .filter {
     -fx-cell-size: 20;
@@ -22,6 +28,14 @@
     -fx-alignment: CENTER_LEFT;
 }
 
+#vehicleTableView .column-header {
+    -fx-background-color: #2B3F63;
+}
+
+#rentalsTable .column-header {
+    -fx-background-color: #2A1C42;
+}
+
 .table-row-cell:selected {
     -fx-background-color: rgb(127, 172, 243);
 }
@@ -29,6 +43,7 @@
 .table-row-cell:selected .text {
     -fx-fill: white;
 }
+
 /* scroll bar starts here */
 
 /* The increment and decrement button CSS class of scrollbar */
@@ -40,7 +55,7 @@
 /* The main scrollbar **track** CSS class */
 .table-view .scroll-bar:horizontal .track,
 .table-view .scroll-bar:vertical .track {
-    -fx-background-color: transparent;
+    /*-fx-background-color: transparent;*/
     -fx-border-color: derive(#7156DD, 80%);
     /*-fx-background-radius: 2rem;*/
     /*-fx-border-radius: 2rem;*/
