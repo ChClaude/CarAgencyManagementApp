@@ -46,7 +46,6 @@ public class Server extends Thread {
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Data loaded from files to database");
     }
 
     private void getDataFromCustomerSeqFileToDb(ObjectInputStream customerInputStream, Statement statement) throws IOException, SQLException {
@@ -55,7 +54,10 @@ public class Server extends Thread {
             while (true) {
                 // loading customers to database
                 Customer customer = (Customer) customerInputStream.readObject();
-                insertCustomerToDb(statement, customer);
+                if (!insertCustomerToDb(statement, customer)) {
+                    System.out.println("This data has already been recorded in table CUSTOMER.");
+                    return;
+                }
                 columns++;
             }
         } catch (EOFException ex) {
@@ -71,7 +73,11 @@ public class Server extends Thread {
             while (true) {
                 // loading vehicles to database
                 Vehicle vehicle = (Vehicle) vehicleInputStream.readObject();
-                insertVehicleToDb(statement, vehicle);
+                if (!insertVehicleToDb(statement, vehicle)) {
+                    System.out.println("This data has already been recorded in table VEHICLE.");
+                    return;
+                }
+
                 columns++;
             }
         } catch (EOFException ex) {
@@ -81,8 +87,9 @@ public class Server extends Thread {
         }
     }
 
-    // this method inserts a customer object to the database
-    private void insertCustomerToDb(Statement statement, Customer customer) throws SQLException {
+    // this method checks whether the object to be inserted is recorded already (returns false in this case)
+    // if not it inserts it to the customer table (returns true in this case)
+    private boolean insertCustomerToDb(Statement statement, Customer customer) throws SQLException {
         ResultSet resultSet = statement.executeQuery("SELECT custNumber FROM CUSTOMERS WHERE custNumber=" +
                 customer.getIdNum() + ";");
 
@@ -90,14 +97,19 @@ public class Server extends Thread {
         while (resultSet.next())
             index = resultSet.getLong(1);
 
-        if (index == -1)
+        if (index == -1) {
             statement.executeUpdate("INSERT INTO CUSTOMERS " +
                     "VALUES('" + customer.getIdNum() + "', '" + customer.getName() + "', '" + customer.getSurname() + "', '"
-                     + customer.getPhoneNum() + "', " + customer.canRent() + ")");
+                    + customer.getPhoneNum() + "', " + customer.canRent() + ")");
+            return true;
+        }
+
+        return false;
     }
 
-    // this method inserts a vehicle object to the database
-    private void insertVehicleToDb(Statement statement, Vehicle vehicle) throws SQLException {
+    // this method checks whether the object to be inserted is recorded already (returns true in this case)
+    // if not it inserts it to the vehicle table (returns true in this case)
+    private boolean insertVehicleToDb(Statement statement, Vehicle vehicle) throws SQLException {
         ResultSet resultSet = statement.executeQuery("SELECT vehNumber FROM VEHICLES WHERE vehNumber=" +
                 vehicle.getVehNumber() + ";");
 
@@ -105,10 +117,15 @@ public class Server extends Thread {
         while (resultSet.next())
             index = resultSet.getInt(1);
 
-        if (index == -1)
+        if (index == -1) {
             statement.executeUpdate("INSERT INTO VEHICLES " +
-                "VALUES(" + vehicle.getVehNumber() + ", '" + vehicle.getMake() + "', '" + vehicle.getCategory() + "', " + vehicle.getRentalPrice()
-                + ", " + vehicle.isAvailableForRent() + ")");
+                    "VALUES(" + vehicle.getVehNumber() + ", '" + vehicle.getMake() + "', '" + vehicle.getCategory() + "', " + vehicle.getRentalPrice()
+                    + ", " + vehicle.isAvailableForRent() + ")");
+
+            return true;
+        }
+
+        return false;
     }
 
     private void createTables() throws SQLException {
@@ -119,20 +136,22 @@ public class Server extends Thread {
         ResultSet rs = metaData.getTables(null, null, RENTALS, null);
 
         while (rs.next()) {
-            if (rs.getString(3).equals(RENTALS))
+            if (rs.getString(3).equals(RENTALS)) {
+                System.out.println("Tables (Customers, Vehicles, Rentals) already existent in the database");
                 return;
+            }
         }
 
         statement.executeUpdate("CREATE TABLE CUSTOMERS(custNumber VARCHAR(255) PRIMARY KEY, " +
-                "firstName VARCHAR(155), surname VARCHAR(155), phoneNum " +
-                "VARCHAR(200), canRent BOOLEAN);");
+                "firstName VARCHAR(155) NOT NULL, surname VARCHAR(155) NOT NULL, phoneNum " +
+                "VARCHAR(200) NOT NULL, canRent BOOLEAN NOT NULL);");
 
-        statement.executeUpdate("CREATE TABLE VEHICLES(vehNumber LONG PRIMARY KEY, make VARCHAR(155), " +
-                "category VARCHAR(155), rentalPrice FLOAT, availableForRent BOOLEAN);");
+        statement.executeUpdate("CREATE TABLE VEHICLES(vehNumber LONG PRIMARY KEY, make VARCHAR(155) NOT NULL, " +
+                "category VARCHAR(155) NOT NULL, rentalPrice FLOAT NOT NULL, availableForRent BOOLEAN NOT NULL);");
 
-        statement.executeUpdate("CREATE TABLE RENTALS(rentalNumber AUTOINCREMENT PRIMARY KEY, dateRental VARCHAR(155), " +
-                "dateReturned VARCHAR(155), pricePerDay FLOAT, totalRental FLOAT, " +
-                "custNumber VARCHAR(255), vehNumber INT);");
+        statement.executeUpdate("CREATE TABLE RENTALS(rentalNumber AUTOINCREMENT PRIMARY KEY, dateRental VARCHAR(155) NOT NULL, " +
+                "dateReturned VARCHAR(155) NOT NULL, pricePerDay FLOAT NOT NULL, totalRental FLOAT NOT NULL, " +
+                "custNumber VARCHAR(255) NOT NULL, vehNumber INT NOT NULL);");
         statement.executeUpdate("ALTER TABLE RENTALS ADD FOREIGN KEY (custNumber) REFERENCES CUSTOMERS(custNumber);");
         statement.executeUpdate("ALTER TABLE RENTALS ADD FOREIGN KEY (vehNumber) REFERENCES VEHICLES(vehNumber);");
 
