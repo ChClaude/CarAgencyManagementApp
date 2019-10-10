@@ -3,6 +3,7 @@ package project_classes;
 import java.io.*;
 public class Vehicle implements Serializable
 {
+    private int vehNumber;
     private String make;
     private String category;
     private double rentalPrice;
@@ -15,21 +16,27 @@ public class Vehicle implements Serializable
     }
     
     //constructor that takes 4 arguments to initialize the instance variables
-    public Vehicle(String m, int cat, double amt, boolean avail)
+    public Vehicle(int vn, String m, int cat, double amt, boolean avail)
     {
+        setVehNumber(vn);
         setMake(m);
         setCategory(cat);
         setAvailableForRent(avail);
         setRentalPrice(amt);
     }
-    public Vehicle(String m, int cat)
+    public Vehicle(int vn, String m, int cat)
     {
+        setVehNumber(vn);
         setMake(m);
         setCategory(cat);
         setAvailableForRent(true);
     }
     
     // set methods
+
+    public void setVehNumber(int vehNumber) {
+        this.vehNumber = vehNumber;
+    }
     public void setMake(String m)
     {
         make = m;
@@ -61,6 +68,11 @@ public class Vehicle implements Serializable
     
     
     //get methods
+
+    public int getVehNumber() {
+        return vehNumber;
+    }
+
     public String getMake()
     {
         return make;

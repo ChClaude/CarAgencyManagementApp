@@ -29,37 +29,37 @@ public class CreateVehicleSer
     {
             try
             {
-                vehicleObj = new Vehicle("Audi A8", 1, 450, true);
+                vehicleObj = new Vehicle(1,"Audi A8", 1, 450, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("BMW 750iL", 1, 450, true);
+                vehicleObj = new Vehicle(2, "BMW 750iL", 1, 450, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Maserati GT", 1, 450, true);
+                vehicleObj = new Vehicle(3,"Maserati GT", 1, 450, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Audi S6", 1, 450, true);
+                vehicleObj = new Vehicle(4,"Audi S6", 1, 450, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Audi Q7", 2, 500, true);
+                vehicleObj = new Vehicle(5,"Audi Q7", 2, 500, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Range Rover Evoque", 2, 500, true);
+                vehicleObj = new Vehicle(6,"Range Rover Evoque", 2, 500, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("BMW X5", 2, 500, true);
+                vehicleObj = new Vehicle(7,"BMW X5", 2, 500, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Jaguar F-Pace", 2, 500, true);
+                vehicleObj = new Vehicle(8,"Jaguar F-Pace", 2, 500, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Mercedes E500", 1, 450, true);
+                vehicleObj = new Vehicle(9,"Mercedes E500", 1, 450, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Volvo XC60", 2, 500, true);
+                vehicleObj = new Vehicle(10,"Volvo XC60", 2, 500, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("BMW 540i", 1, 450, true);
+                vehicleObj = new Vehicle(11,"BMW 540i", 1, 450, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Volvo XC90", 2, 500, true);
+                vehicleObj = new Vehicle(12,"Volvo XC90", 2, 500, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Mercedes S500", 1, 450, true);
+                vehicleObj = new Vehicle(13,"Mercedes S500", 1, 450, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Mercedes GLE300", 2, 500, true);
+                vehicleObj = new Vehicle(14,"Mercedes GLE300", 2, 500, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("Lexus LS460", 1, 450, true);
+                vehicleObj = new Vehicle(15,"Lexus LS460", 1, 450, true);
                 outFile.writeObject(vehicleObj);
-                vehicleObj = new Vehicle("LExus RX350", 2, 500, true);
+                vehicleObj = new Vehicle(16,"LExus RX350", 2, 500, true);
                 outFile.writeObject(vehicleObj);
             }
             catch(IOException ioe){
