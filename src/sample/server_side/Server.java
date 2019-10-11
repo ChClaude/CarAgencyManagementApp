@@ -150,7 +150,7 @@ public class Server extends Thread {
                 "category VARCHAR(155) NOT NULL, rentalPrice FLOAT NOT NULL, availableForRent BOOLEAN NOT NULL);");
 
         statement.executeUpdate("CREATE TABLE RENTALS(rentalNumber AUTOINCREMENT PRIMARY KEY, dateRental VARCHAR(155) NOT NULL, " +
-                "dateReturned VARCHAR(155) NOT NULL, pricePerDay FLOAT NOT NULL, totalRental FLOAT NOT NULL, " +
+                "dateReturned VARCHAR(155), pricePerDay FLOAT NOT NULL, totalRental FLOAT, " +
                 "custNumber VARCHAR(255) NOT NULL, vehNumber INT NOT NULL);");
         statement.executeUpdate("ALTER TABLE RENTALS ADD FOREIGN KEY (custNumber) REFERENCES CUSTOMERS(custNumber);");
         statement.executeUpdate("ALTER TABLE RENTALS ADD FOREIGN KEY (vehNumber) REFERENCES VEHICLES(vehNumber);");

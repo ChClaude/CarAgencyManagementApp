@@ -28,3 +28,7 @@ R
 "src/sample/server_side/Server.java,2\0\20684d9afd60609f4e1cb966a03b166bdef1c50b
 Y
 )src/project_classes/CreateVehicleSer.java,6\6\661e89a48a143e8bbfb57a44323eac9f68ba1d2c
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+@
+src/css/main.css,6\0\6065f2caf6d8f7fe98983d5e8db73e0048faa788

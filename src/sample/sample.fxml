@@ -3,6 +3,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -35,7 +36,7 @@
                   </Label>
                </children>
             </Pane>
-            <Button fx:id="btnNewCustomer" alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" text="Add New Customer" textFill="WHITE">
+            <Button fx:id="btnNewCustomer" alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" styleClass="navbutton" text="Add New Customer" textFill="WHITE">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="USER_PLUS" size="15.0" />
                </graphic>
@@ -46,7 +47,7 @@
                   <Insets left="50.0" />
                </padding>
             </Button>
-            <Button fx:id="btnNewVehicle" alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" text="Add New Vehicle" textFill="WHITE">
+            <Button fx:id="btnNewVehicle" alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" styleClass="navbutton" text="Add New Vehicle" textFill="WHITE">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="PLUS_CIRCLE" size="15.0" />
                </graphic>
@@ -54,7 +55,7 @@
                   <Insets left="50.0" />
                </padding>
             </Button>
-            <Button fx:id="btnRentVehicle" alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" text="Rent Vehicle" textFill="WHITE">
+            <Button fx:id="btnRentVehicle" alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" styleClass="navbutton" text="Rent Vehicle" textFill="WHITE">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="DOLLAR" size="15.0" />
                </graphic>
@@ -62,7 +63,7 @@
                   <Insets left="50.0" />
                </padding>
             </Button>
-            <Button fx:id="btnReturnVehicle" alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" text="Return Vehicle" textFill="WHITE">
+            <Button fx:id="btnReturnVehicle" alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" styleClass="navbutton" text="Return Vehicle" textFill="WHITE">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="CAR" size="15.0" />
                </graphic>
@@ -70,7 +71,7 @@
                   <Insets left="50.0" />
                </padding>
             </Button>
-            <Button fx:id="btnListAllRentals" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="10.0" layoutY="230.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" text="List All Rentals" textFill="WHITE">
+            <Button fx:id="btnListAllRentals" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="10.0" layoutY="230.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="274.0" styleClass="navbutton" text="List All Rentals" textFill="WHITE">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="REORDER" size="15.0" />
                </graphic>
@@ -82,42 +83,6 @@
       </VBox>
       <StackPane layoutX="300.0" layoutY="217.0" prefHeight="405.0" prefWidth="777.0">
          <children>
-            <GridPane fx:id="pnAllRentals" style="-fx-background-color: #ffffff;" vgap="4.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="196.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="375.0" minHeight="10.0" prefHeight="375.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <TableView fx:id="rentalsTable" prefHeight="366.0" prefWidth="777.0" GridPane.rowIndex="1">
-                    <columns>
-                      <TableColumn prefWidth="85.0" text="Rental #" />
-                      <TableColumn prefWidth="104.0" text="Rental Date" />
-                        <TableColumn prefWidth="99.0" text="Return Date" />
-                        <TableColumn prefWidth="117.0" text="Daily Price" />
-                        <TableColumn prefWidth="132.0" text="Customer" />
-                        <TableColumn prefWidth="117.0" text="Vehicle" />
-                        <TableColumn prefWidth="122.0" text="Total Price" />
-                    </columns>
-                  </TableView>
-                  <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #ffffff;">
-                     <children>
-                        <TextField prefHeight="17.0" prefWidth="737.0" promptText="start here typing to filter customers" style="-fx-border-color: #e5e5e5;">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </TextField>
-                        <FontAwesomeIconView fill="#2a1c42" glyphName="SEARCH" size="20.0" textAlignment="CENTER" wrappingWidth="37.571428298950195">
-                           <HBox.margin>
-                              <Insets top="4.0" />
-                           </HBox.margin>
-                        </FontAwesomeIconView>
-                     </children>
-                  </HBox>
-               </children>
-            </GridPane>
             <GridPane fx:id="pnAddVehicle" prefHeight="388.0" prefWidth="691.0" style="-fx-background-color: #ffffff;" vgap="7.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -170,6 +135,118 @@
                   <Insets top="4.0" />
                </padding>
             </GridPane>
+            <GridPane fx:id="pnAllRentals" style="-fx-background-color: #ffffff;" vgap="4.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="196.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="375.0" minHeight="10.0" prefHeight="375.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TableView fx:id="rentalsTable" prefHeight="366.0" prefWidth="777.0" GridPane.rowIndex="1">
+                    <columns>
+                      <TableColumn prefWidth="85.0" text="Rental #" />
+                      <TableColumn prefWidth="104.0" text="Rental Date" />
+                        <TableColumn prefWidth="99.0" text="Return Date" />
+                        <TableColumn prefWidth="117.0" text="Daily Price" />
+                        <TableColumn prefWidth="132.0" text="Customer" />
+                        <TableColumn prefWidth="117.0" text="Vehicle" />
+                        <TableColumn prefWidth="122.0" text="Total Price" />
+                    </columns>
+                  </TableView>
+                  <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #ffffff;">
+                     <children>
+                        <TextField prefHeight="17.0" prefWidth="737.0" promptText="start here typing to filter customers" style="-fx-border-color: #e5e5e5;">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </TextField>
+                        <FontAwesomeIconView fill="#2a1c42" glyphName="SEARCH" size="20.0" textAlignment="CENTER" wrappingWidth="37.571428298950195">
+                           <HBox.margin>
+                              <Insets top="4.0" />
+                           </HBox.margin>
+                        </FontAwesomeIconView>
+                     </children>
+                  </HBox>
+               </children>
+            </GridPane>
+            <GridPane fx:id="pnReturnVehicle" prefHeight="415.0" prefWidth="790.0" style="-fx-background-color: #ffffff;">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="135.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="192.0" minHeight="10.0" prefHeight="127.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="215.0" minHeight="10.0" prefHeight="215.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <GridPane hgap="25.0" GridPane.rowIndex="1">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="398.0" style="-fx-background-color: #632B3F;" text="VIEW OUTSTANDING RENTALS" textFill="WHITE" />
+                        <ComboBox prefHeight="44.0" prefWidth="376.0" promptText="PICK RENTAL NUMBER" style="-fx-background-color: #632B3F;" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <Label prefHeight="35.0" prefWidth="76.0" text="Date:">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="39.0" prefWidth="370.0" text="16 February 1997 - 15 : 45 : 15 ">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="293.0" style="-fx-background-color: #632B3F;" text="PICK ALTERNATIVE DATE" textFill="WHITE" />
+                     </children>
+                  </HBox>
+                  <GridPane GridPane.rowIndex="2">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="591.0" minWidth="10.0" prefWidth="587.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="383.0" minWidth="10.0" prefWidth="190.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="216.0" prefWidth="200.0" style="-fx-background-color: #632B3F;" text="RETURN" textFill="WHITE" GridPane.columnIndex="1">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="CHECK" size="35" />
+                           </graphic>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="40.0" />
+                           </padding>
+                        </Button>
+                        <Label prefHeight="209.0" prefWidth="582.0" text="Return Deal Details">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="8.0" left="15.0" right="8.0" top="8.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="4.0" />
+                     </padding>
+                  </GridPane>
+               </children>
+            </GridPane>
             <GridPane fx:id="pnRentVehicle" prefHeight="415.0" prefWidth="790.0" style="-fx-background-color: #ffffff;">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -208,7 +285,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <DatePicker prefHeight="38.0" prefWidth="285.0" promptText="Pick Date or Record Today's One" style="-fx-background-color: #e5e5e5;" />
+                        <DatePicker prefHeight="38.0" prefWidth="285.0" promptText="Pick date or leave today's one as default" style="-fx-background-color: #e5e5e5;" />
                      </children>
                   </HBox>
                   <GridPane GridPane.rowIndex="2">
