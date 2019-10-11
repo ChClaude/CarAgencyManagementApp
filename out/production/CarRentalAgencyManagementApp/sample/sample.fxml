@@ -357,7 +357,7 @@
                               <Insets left="7.0" top="6.0" />
                            </HBox.margin>
                         </FontAwesomeIconView>
-                        <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="197.0" style="-fx-background-color: #7156DD;" text="ADD CUSTOMER" textFill="WHITE">
+                        <Button fx:id="addCustomerBtn" mnemonicParsing="false" onAction="#handleAddCustomer" prefHeight="31.0" prefWidth="197.0" style="-fx-background-color: #7156DD;" text="ADD CUSTOMER" textFill="WHITE">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="USER_PLUS" />
                            </graphic>

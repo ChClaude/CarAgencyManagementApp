@@ -1,14 +1,14 @@
 package sample;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 public class Client {
 
     private String serverName;
     private int port;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
 
     Client(String serverName, int port) {
         this.serverName = serverName;
@@ -18,13 +18,23 @@ public class Client {
             System.out.printf("Connecting to %s on port %d%n", serverName, port);
             System.out.printf("Connected to %s%n", client.getRemoteSocketAddress().toString());
 
-            DataOutputStream out = new DataOutputStream(client.getOutputStream());
-            out.writeUTF("This is from " + client.getLocalSocketAddress());
+            out = new ObjectOutputStream(client.getOutputStream());
+            out.writeObject("This is from " + client.getLocalSocketAddress());
 
-            DataInputStream in = new DataInputStream(client.getInputStream());
-            System.out.printf("Server says %s%n", in.readUTF());
+            in = new ObjectInputStream(client.getInputStream());
+            System.out.printf("Server says %s%n", in.readObject());
         } catch (IOException e) {
             System.out.printf("An error occurred: %s%n", e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeToServer(Object o) {
+        try {
+            out.writeObject(o);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

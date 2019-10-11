@@ -18,7 +18,7 @@ public class Server extends Thread {
 
     Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(7000);
+//        serverSocket.setSoTimeout(7000);
 
         populateDatabase();
     }
@@ -184,11 +184,11 @@ public class Server extends Thread {
 
                 System.out.println("Connected to " + server.getRemoteSocketAddress());
 
-                DataInputStream in = new DataInputStream(server.getInputStream());
-                System.out.println(in.readUTF());
+                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
+                System.out.println(in.readObject());
 
-                DataOutputStream out = new DataOutputStream(server.getOutputStream());
-                out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress());
+                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+                out.writeObject("Thank you for connecting to " + server.getLocalSocketAddress());
             } catch (SocketTimeoutException s) {
                 System.out.println("Socket timed out");
                 closeConnection();
@@ -196,6 +196,8 @@ public class Server extends Thread {
             } catch (IOException e) {
                 System.out.printf("An error occurred: %s%n", e);
                 closeConnection();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
         }
     }
