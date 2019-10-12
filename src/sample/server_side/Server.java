@@ -18,9 +18,44 @@ public class Server extends Thread {
 
     Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-//        serverSocket.setSoTimeout(7000);
 
         populateDatabase();
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Waiting for client on port " +
+                serverSocket.getLocalPort() + "...");
+
+        while (true) {
+            try (Socket server = serverSocket.accept()) {
+
+                System.out.println("Connected to " + server.getRemoteSocketAddress());
+
+                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+                out.writeObject("Thank you for connecting to " + server.getLocalSocketAddress());
+
+
+                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
+                Object object = in.readObject();
+
+                if (object instanceof Customer) {
+                    Customer customer = (Customer) object;
+                    insertCustomerToDb(conn.createStatement(), customer);
+                } else {
+                    System.out.println(object);
+                }
+            } catch (SocketTimeoutException s) {
+                System.out.println("Socket timed out");
+                closeConnection();
+                break;
+            } catch (IOException e) {
+                System.out.printf("An error occurred: %s%n", e);
+                closeConnection();
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void populateDatabase() {
@@ -90,14 +125,14 @@ public class Server extends Thread {
     // this method checks whether the object to be inserted is recorded already (returns false in this case)
     // if not it inserts it to the customer table (returns true in this case)
     private boolean insertCustomerToDb(Statement statement, Customer customer) throws SQLException {
-        ResultSet resultSet = statement.executeQuery("SELECT custNumber FROM CUSTOMERS WHERE custNumber=" +
-                customer.getIdNum() + ";");
+        ResultSet resultSet = statement.executeQuery("SELECT custNumber FROM CUSTOMERS WHERE custNumber='" +
+                customer.getIdNum() + "';");
 
-        long index = -1L;
+        String index = "";
         while (resultSet.next())
-            index = resultSet.getLong(1);
+            index = resultSet.getString(1);
 
-        if (index == -1) {
+        if (index.equals("")) {
             statement.executeUpdate("INSERT INTO CUSTOMERS " +
                     "VALUES('" + customer.getIdNum() + "', '" + customer.getName() + "', '" + customer.getSurname() + "', '"
                     + customer.getPhoneNum() + "', " + customer.canRent() + ")");
@@ -174,31 +209,4 @@ public class Server extends Thread {
         }
     }
 
-    @Override
-    public void run() {
-        System.out.println("Waiting for client on port " +
-                serverSocket.getLocalPort() + "...");
-
-        while (true) {
-            try (Socket server = serverSocket.accept()) {
-
-                System.out.println("Connected to " + server.getRemoteSocketAddress());
-
-                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
-                System.out.println(in.readObject());
-
-                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
-                out.writeObject("Thank you for connecting to " + server.getLocalSocketAddress());
-            } catch (SocketTimeoutException s) {
-                System.out.println("Socket timed out");
-                closeConnection();
-                break;
-            } catch (IOException e) {
-                System.out.printf("An error occurred: %s%n", e);
-                closeConnection();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }

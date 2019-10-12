@@ -32,3 +32,11 @@ Y
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 @
 src/css/main.css,6\0\6065f2caf6d8f7fe98983d5e8db73e0048faa788
+W
+'src/sample/layouts/customer_picker.fxml,3\4\34730fc0600fa5f49a1ea3100f267149c0c8d349
+X
+(src/sample/layouts/admin_permission.fxml,f\5\f583b379e9119dd795da7737488559184e8d1aa3
+V
+&src/sample/layouts/vehicle_picker.fxml,e\d\edd4fa0c2a780dbb74a8f82bd71091fbdf451ce1
+]
+-src/sample/layouts/add_customer_activity.fxml,9\0\90808379d49dec69f838dc973dc632eb513dd418

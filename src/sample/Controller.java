@@ -99,7 +99,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // this is the initializing method
-        System.out.println("from initialize");
+        System.out.println("this is the initialize block");
         client = new Client("localhost", 8085);
     }
 
@@ -164,7 +164,8 @@ public class Controller implements Initializable {
             /*System.out.printf("Customer ID: %s, phone: %s, first Name: %s, Surname: %s, Can Rent: %s%n",
                     custID, phoneNumber, firstName, surname, canRent);*/
             Customer customer = new Customer(firstName, surname, custID, phoneNumber, canRent);
-            client.writeToServer(customer);
+            System.out.println("saving");
+            client.writeCustomerToServer(customer);
         } else if (event.getSource() == closeAddCustomerStage) {
             ((Node) event.getSource()).getScene().getWindow().hide();
         } else if (event.getSource() == closeIcon) {

@@ -1,14 +1,17 @@
 package sample;
 
-import java.io.*;
+import project_classes.Customer;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class Client {
 
     private String serverName;
     private int port;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
 
     Client(String serverName, int port) {
         this.serverName = serverName;
@@ -18,10 +21,10 @@ public class Client {
             System.out.printf("Connecting to %s on port %d%n", serverName, port);
             System.out.printf("Connected to %s%n", client.getRemoteSocketAddress().toString());
 
-            out = new ObjectOutputStream(client.getOutputStream());
+            ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
             out.writeObject("This is from " + client.getLocalSocketAddress());
 
-            in = new ObjectInputStream(client.getInputStream());
+            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
             System.out.printf("Server says %s%n", in.readObject());
         } catch (IOException e) {
             System.out.printf("An error occurred: %s%n", e);
@@ -30,10 +33,14 @@ public class Client {
         }
     }
 
-    public void writeToServer(Object o) {
-        try {
-            out.writeObject(o);
-        } catch (IOException e) {
+    void writeCustomerToServer(Customer customer) {
+        try (Socket client = new Socket(serverName, port)) {
+            ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+            out.writeObject(customer);
+
+            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+            System.out.printf("Server says %s%n", in.readObject());
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
