@@ -1,25 +1,32 @@
 package sample.server_side;
 
 import project_classes.Customer;
+import project_classes.Rental;
 import project_classes.Vehicle;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server extends Thread {
 
     private ServerSocket serverSocket;
     private Connection conn = null;
 
+
     Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-
         populateDatabase();
+
     }
 
     @Override
@@ -33,8 +40,7 @@ public class Server extends Thread {
                 System.out.println("Connected to " + server.getRemoteSocketAddress());
 
                 ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
-                out.writeObject("Thank you for connecting to " + server.getLocalSocketAddress());
-
+                out.writeObject(retrieveDataFromDb());
 
                 ObjectInputStream in = new ObjectInputStream(server.getInputStream());
                 Object object = in.readObject();
@@ -60,6 +66,44 @@ public class Server extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+
+    private Object[] retrieveDataFromDb() throws SQLException {
+        Object[] objects = new Object[3];
+        List<Customer> customers = new ArrayList<>();
+        List<Vehicle> vehicles = new ArrayList<>();
+        List<Rental> rentals = new ArrayList<>();
+
+        Statement statement = conn.createStatement();
+        ResultSet custResults = statement.executeQuery("SELECT * FROM CUSTOMERS");
+        while (custResults.next()) {
+            Customer customer = new Customer(custResults.getString("custNumber"), custResults.getString("firstName"),
+                    custResults.getString("surname"), custResults.getString("phoneNum"), custResults.getBoolean("canRent"));
+            customers.add(customer);
+        }
+
+        ResultSet vehResults = statement.executeQuery("SELECT * FROM VEHICLES");
+        while (vehResults.next()) {
+            Vehicle vehicle = new Vehicle(vehResults.getInt("vehNumber"), vehResults.getString("make"),
+                    vehResults.getString("category").equals("Sedan") ? 1 : 0,
+                    vehResults.getDouble("rentalPrice"), vehResults.getBoolean("availableForRent"));
+            vehicles.add(vehicle);
+        }
+
+        ResultSet rentResults = statement.executeQuery("SELECT * FROM RENTALS");
+        while (rentResults.next()) {
+            Rental rental = new Rental(rentResults.getInt("rentalNumber"), rentResults.getString("dateRental"),
+                    rentResults.getString("dateReturned"), rentResults.getDouble("pricePerDay"),
+                    rentResults.getDouble("pricePerDay"), rentResults.getInt("custNumber"),
+                    rentResults.getInt("vehNumber"));
+            rentals.add(rental);
+        }
+
+        objects[0] = customers;
+        objects[1] = vehicles;
+        objects[2] = rentals;
+
+        return objects;
     }
 
     private void populateDatabase() {

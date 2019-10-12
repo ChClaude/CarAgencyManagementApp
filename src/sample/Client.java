@@ -1,17 +1,20 @@
 package sample;
 
 import project_classes.Customer;
+import project_classes.Rental;
+import project_classes.Vehicle;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.List;
 
 public class Client {
 
     private String serverName;
     private int port;
+    private Object[] data;
 
     Client(String serverName, int port) {
         this.serverName = serverName;
@@ -25,12 +28,24 @@ public class Client {
             out.writeObject("This is from " + client.getLocalSocketAddress());
 
             ObjectInputStream in = new ObjectInputStream(client.getInputStream());
-            System.out.printf("Server says %s%n", in.readObject());
+            data = (Object[]) in.readObject();
         } catch (IOException e) {
             System.out.printf("An error occurred: %s%n", e);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    List<Customer> getCustomers() {
+        return (List<Customer>) data[0];
+    }
+
+    List<Vehicle> getVehicles() {
+        return (List<Vehicle>) data[1];
+    }
+
+    List<Rental> getRentals() {
+        return (List<Rental>) data[2];
     }
 
     String writeCustomerToServer(Customer customer) {

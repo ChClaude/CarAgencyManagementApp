@@ -15,6 +15,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import project_classes.Customer;
+import project_classes.Rental;
+import project_classes.Vehicle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -96,8 +98,22 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // this is the initializing method
-        System.out.println("this is the initialize block");
         client = new Client("localhost", 8085);
+
+        /*System.out.println("-------------CUSTOMERS");
+        for (Customer customer : client.getCustomers()) {
+            System.out.println(customer);
+        }
+
+        System.out.println("-------------VEHICLES");
+        for (Vehicle vehicle : client.getVehicles()) {
+            System.out.println(vehicle);
+        }
+
+        System.out.println("-------------RENTALS");
+        for (Rental rental : client.getRentals()) {
+            System.out.println(rental);
+        }*/
     }
 
     @FXML
