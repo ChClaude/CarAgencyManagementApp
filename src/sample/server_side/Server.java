@@ -41,7 +41,11 @@ public class Server extends Thread {
 
                 if (object instanceof Customer) {
                     Customer customer = (Customer) object;
-                    insertCustomerToDb(conn.createStatement(), customer);
+                    boolean isInserted = insertCustomerToDb(conn.createStatement(), customer);
+                    if (isInserted)
+                        out.writeObject("Customer added");
+                    else
+                        out.writeObject("An error occurred while adding customer");
                 } else {
                     System.out.println(object);
                 }

@@ -33,16 +33,21 @@ public class Client {
         }
     }
 
-    void writeCustomerToServer(Customer customer) {
+    String writeCustomerToServer(Customer customer) {
+        String response = "";
         try (Socket client = new Socket(serverName, port)) {
             ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
             out.writeObject(customer);
 
             ObjectInputStream in = new ObjectInputStream(client.getInputStream());
-            System.out.printf("Server says %s%n", in.readObject());
+            do {
+                response = (String) in.readObject();
+            } while (!(response.equals("Customer added") || response.equals("An error occurred while adding customer")));
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        return response;
     }
 
     public String getServerName() {

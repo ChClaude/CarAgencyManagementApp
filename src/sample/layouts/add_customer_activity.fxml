@@ -54,22 +54,22 @@
             </HBox>
             <HBox prefHeight="40.0" prefWidth="290.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Label prefHeight="41.0" prefWidth="92.0" text="Firstname" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="firsNameNewCustomer" prefHeight="37.0" prefWidth="192.0" style="-fx-text-fill: #ffffff;" styleClass="addCustomerInput" stylesheets="@../../css/main.css" />
-               </children>
-            </HBox>
-            <HBox prefHeight="40.0" prefWidth="290.0" GridPane.rowIndex="1">
-               <children>
                   <Label prefHeight="41.0" prefWidth="92.0" text="Surname" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
                   <TextField fx:id="surnameNewCustomer" prefHeight="37.0" prefWidth="192.0" style="-fx-text-fill: #ffffff;" styleClass="addCustomerInput" stylesheets="@../../css/main.css" />
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="290.0" GridPane.rowIndex="1">
+               <children>
+                  <Label prefHeight="41.0" prefWidth="92.0" text="FirstName" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="firsNameNewCustomer" prefHeight="37.0" prefWidth="192.0" style="-fx-text-fill: #ffffff;" styleClass="addCustomerInput" stylesheets="@../../css/main.css" />
                </children>
             </HBox>
             <CheckBox fx:id="canRentNewCustomer" mnemonicParsing="false" prefHeight="44.0" prefWidth="197.0" selected="true" text="Can Rent" textFill="WHITE" GridPane.rowIndex="2">

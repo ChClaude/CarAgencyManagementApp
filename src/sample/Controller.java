@@ -8,10 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -119,7 +116,11 @@ public class Controller implements Initializable {
                     CornerRadii.EMPTY, Insets.EMPTY)));
             managePaneVisibility(pnAddVehicle);
         } else if (event.getSource() == btnRentVehicle) {
-            // Rent Vehicle
+            /*
+            * ****************
+            *   RENT VEHICLE *
+            * ****************
+            * */
             labelStatus.setText("Rentals");
             status.setBackground(new Background(new BackgroundFill(Color.rgb(44, 99, 63),
                     CornerRadii.EMPTY, Insets.EMPTY)));
@@ -155,17 +156,33 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         } else if (event.getSource() == saveNewCustomer) {
+            /*
+             * *****************
+             *   SAVE CUSTOMER *
+             * *****************
+             * */
+
             String custID = customerIDNewCustomer.getText();
             String phoneNumber = phoneNumberNewCustomer.getText();
             String firstName = firsNameNewCustomer.getText();
             String surname = surnameNewCustomer.getText();
             boolean canRent = canRentNewCustomer.isSelected();
 
-            /*System.out.printf("Customer ID: %s, phone: %s, first Name: %s, Surname: %s, Can Rent: %s%n",
-                    custID, phoneNumber, firstName, surname, canRent);*/
+            customerIDNewCustomer.setText("");
+            phoneNumberNewCustomer.setText("");
+            firsNameNewCustomer.setText("");
+            surnameNewCustomer.setText("");
+            canRentNewCustomer.setText("");
+
             Customer customer = new Customer(firstName, surname, custID, phoneNumber, canRent);
-            System.out.println("saving");
-            client.writeCustomerToServer(customer);
+            String response = client.writeCustomerToServer(customer);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText(response);
+
+            alert.showAndWait();
         } else if (event.getSource() == closeAddCustomerStage) {
             ((Node) event.getSource()).getScene().getWindow().hide();
         } else if (event.getSource() == closeIcon) {
