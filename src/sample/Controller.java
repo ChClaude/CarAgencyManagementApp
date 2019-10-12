@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -89,23 +92,55 @@ public class Controller implements Initializable {
     @FXML
     private CheckBox canRentNewCustomer;
 
+
+    /*
+    *************************
+    * CUSTOMER TABLE SET UP *
+    * ***********************
+    * */
+    @FXML
+    private TableView<Customer> customerTableView;
+
+    private ObservableList<Customer> customerCollection;
+
+    @FXML
+    private TableColumn<Customer, String> customerNumber;
+
+    @FXML
+    private TableColumn<Customer, String> customerFirstname;
+
+    @FXML
+    private TableColumn<Customer, String> customerSurname;
+
+    @FXML
+    private TableColumn<Customer, String> customerPhone;
+
+    @FXML
+    private TableColumn<Customer, String> customerCanRent;
+
     private Client client;
 
-    /*public Controller() {
-
-    }*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // this is the initializing method
+        // initializing the client side
         client = new Client("localhost", 8085);
 
-        /*System.out.println("-------------CUSTOMERS");
+        // customers tableview
+        customerNumber.setCellValueFactory(new PropertyValueFactory<>("IdNum"));
+        customerFirstname.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        customerSurname.setCellValueFactory(new PropertyValueFactory<>("Surname"));
+        customerPhone.setCellValueFactory(new PropertyValueFactory<>("PhoneNum"));
+        customerCanRent.setCellValueFactory(new PropertyValueFactory<>("CanRent"));
+        customerCollection = FXCollections.observableArrayList(client.getCustomers());
+        customerTableView.setItems(customerCollection);
+
+        System.out.println("-------------CUSTOMERS");
         for (Customer customer : client.getCustomers()) {
             System.out.println(customer);
         }
 
-        System.out.println("-------------VEHICLES");
+        /*System.out.println("-------------VEHICLES");
         for (Vehicle vehicle : client.getVehicles()) {
             System.out.println(vehicle);
         }

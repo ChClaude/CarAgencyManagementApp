@@ -77,8 +77,8 @@ public class Server extends Thread {
         Statement statement = conn.createStatement();
         ResultSet custResults = statement.executeQuery("SELECT * FROM CUSTOMERS");
         while (custResults.next()) {
-            Customer customer = new Customer(custResults.getString("custNumber"), custResults.getString("firstName"),
-                    custResults.getString("surname"), custResults.getString("phoneNum"), custResults.getBoolean("canRent"));
+            Customer customer = new Customer(custResults.getString("firstName"), custResults.getString("surname"),
+                    custResults.getString("custNumber"), custResults.getString("phoneNum"), custResults.getBoolean("canRent"));
             customers.add(customer);
         }
 
