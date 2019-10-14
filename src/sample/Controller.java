@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
@@ -61,6 +60,9 @@ public class Controller implements Initializable {
     private GridPane pnAddCustomerFields;
 
     @FXML
+    private GridPane pnAddVehicleFields;
+
+    @FXML
     private Button addCustomerBtn;
 
     // Add Customer Stage variable
@@ -69,9 +71,6 @@ public class Controller implements Initializable {
 
     @FXML
     private Button cancelAddCustomerStage;
-
-    @FXML
-    private Button closeIcon;
 
     @FXML
     private TextField customerIDNewCustomer;
@@ -87,6 +86,32 @@ public class Controller implements Initializable {
 
     @FXML
     private CheckBox canRentNewCustomer;
+
+    // Add Vehicle Stage variable
+    @FXML
+    private Button addVehicleBtn;
+
+    @FXML
+    private Button saveNewVehicle;
+
+    @FXML
+    private Button cancelAddVehicle;
+
+    @FXML
+    private TextField vehicleNumNewVehicle;
+
+    @FXML
+    private TextField makeNewVehicle;
+
+    @FXML
+    private TextField dailyPriceNewVehicle;
+
+    @FXML
+    private TextField categoryNewVehicle;
+
+    @FXML
+    private CheckBox isAvalaibleNewVehicle;
+
 
 
     /*
@@ -286,13 +311,49 @@ public class Controller implements Initializable {
             alert.showAndWait();
         } else if (event.getSource() == cancelAddCustomerStage) {
             managePaneVisibility(pnAddCustomers);
-        } else if (event.getSource() == closeIcon) {
-            ((Node) event.getSource()).getScene().getWindow().hide();
+        }
+    }
+
+    @FXML
+    void handleAddVehicle(ActionEvent event) {
+        if (event.getSource() == addVehicleBtn) {
+            managePaneVisibility(pnAddVehicleFields);
+        } else if (event.getSource() == saveNewVehicle) {
+            /*
+             * *****************
+             *   SAVE VEHICLE *
+             * *****************
+             * */
+
+            int vn = Integer.parseInt(vehicleNumNewVehicle.getText());
+            String make = makeNewVehicle.getText();
+            int category = categoryNewVehicle.getText().equals("Sedan")? 1 : 2;
+            double dailyPrice = Double.parseDouble(dailyPriceNewVehicle.getText());
+            boolean isAvailable = isAvalaibleNewVehicle.isSelected();
+
+            vehicleNumNewVehicle.setText("");
+            makeNewVehicle.setText("");
+            categoryNewVehicle.setText("");
+            dailyPriceNewVehicle.setText("");
+            isAvalaibleNewVehicle.setText("");
+
+            Vehicle vehicle = new Vehicle(vn, make, category, dailyPrice, isAvailable);
+//            String response = client.writeCustomerToServer(customer);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("response");
+
+            alert.showAndWait();
+        } else if (event.getSource() == cancelAddVehicle) {
+            managePaneVisibility(pnAddVehicle);
         }
     }
 
     private void managePaneVisibility(Pane pane) {
-        Pane[] panes = {pnAddCustomers, pnAllRentals, pnAddVehicle, pnRentVehicle, pnReturnVehicle, pnAddCustomerFields};
+        Pane[] panes = {pnAddCustomers, pnAllRentals, pnAddVehicle, pnRentVehicle, pnReturnVehicle, pnAddCustomerFields,
+        pnAddVehicleFields};
         for (Pane cpane : panes) {
             if (pane.equals(cpane)) {
                 cpane.setVisible(true);
