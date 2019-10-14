@@ -15,20 +15,24 @@ public class Client {
     private String serverName;
     private int port;
     private Object[] data;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
 
     Client(String serverName, int port) {
         this.serverName = serverName;
         this.port = port;
+    }
 
+    void runClient() {
         try (Socket client = new Socket(serverName, port)) {
             System.out.printf("Connecting to %s on port %d%n", serverName, port);
             System.out.printf("Connected to %s%n", client.getRemoteSocketAddress().toString());
 
-            ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
-            out.writeObject("This is from " + client.getLocalSocketAddress());
+            out = new ObjectOutputStream(client.getOutputStream());
+            in = new ObjectInputStream(client.getInputStream());
 
-            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
             data = (Object[]) in.readObject();
+            out.writeObject("This is from " + client.getLocalSocketAddress());
         } catch (IOException e) {
             System.out.printf("An error occurred: %s%n", e);
         } catch (ClassNotFoundException e) {
@@ -40,8 +44,6 @@ public class Client {
         return (List<Customer>) data[0];
     }
 
-//    void setCustomers() {}
-
     List<Vehicle> getVehicles() {
         return (List<Vehicle>) data[1];
     }
@@ -50,39 +52,16 @@ public class Client {
         return (List<Rental>) data[2];
     }
 
-    public String writeCustomerToServer(Customer customer) {
+    String writeCustomerToServer(Customer customer) {
         String response = "response";
-        try (Socket client = new Socket(serverName, port)) {
-            ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+        try {
             out.writeObject(customer);
-
-            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
-            do {
-                if (in.readObject() instanceof String)
-                    response =  (String) in.readObject();
-
-            } while (!(response.equals("Customer added") || response.equals("An error occurred while adding customer")));
+            response = in.readObject() instanceof String ? (String) in.readObject() : "Response type is not a text";
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         return response;
-    }
-
-    public String getServerName() {
-        return serverName;
-    }
-
-    public void setServerName(String serverName) {
-        this.serverName = serverName;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
     }
 
     @Override

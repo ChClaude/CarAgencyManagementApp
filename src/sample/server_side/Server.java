@@ -17,59 +17,86 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server extends Thread {
+public class Server {
 
-    private ServerSocket serverSocket;
     private Connection conn = null;
 
 
-    Server(int port) throws IOException {
-        serverSocket = new ServerSocket(port);
+    private Server(int port) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(port);
         populateDatabase();
 
-    }
-
-    @Override
-    public void run() {
         System.out.println("Waiting for client on port " +
                 serverSocket.getLocalPort() + "...");
 
-        while (true) {
-            try (Socket server = serverSocket.accept()) {
+        try (Socket server = serverSocket.accept()) {
 
-                System.out.println("Connected to " + server.getRemoteSocketAddress());
+            System.out.println("Connected to " + server.getRemoteSocketAddress());
 
-                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
-                out.writeObject(retrieveDataFromDb());
+            ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
 
-                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
-                Object object = in.readObject();
+            ObjectInputStream in = new ObjectInputStream(server.getInputStream());
 
+            out.writeObject(retrieveDataFromDb());
+            Object object = in.readObject();
+            while (true) {
                 if (object instanceof Customer) {
                     Customer customer = (Customer) object;
                     boolean isInserted = insertCustomerToDb(conn.createStatement(), customer);
+
                     if (isInserted) {
                         out.writeObject("Customer added");
-                    }
-                    else {
-                        out.flush();
+                    } else {
                         out.writeObject("An error occurred while adding customer");
                     }
+
+                    int i;
+                    do {
+                        i = in.available();
+                    }while (i == 0);
+
+                    object = in.readObject();
+                } else if (object instanceof String) {
+                    // Checking String objects
+                    String msg = (String) object;
+                    if (msg.equals("exit"))
+                        break;
+
+                    System.out.println(msg);
+                    int i;
+                     do {
+                         i = in.available();
+                     }while (i == 0);
+
+                    object = in.readObject();
                 } else {
                     System.out.println(object);
                 }
-            } catch (SocketTimeoutException s) {
-                System.out.println("Socket timed out");
-                closeConnection();
-                break;
-            } catch (IOException e) {
-                System.out.printf("An error occurred: %s%n", e);
-                closeConnection();
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
             }
+        } catch (SocketTimeoutException s) {
+            System.out.println("Socket timed out");
+            closeConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+            closeConnection();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void main(String[] args) {
+        Server server = null;
+        try {
+            server = new Server(8085);
+        } catch (IOException e) {
+            System.out.println("An error occurred " + e);
+        } finally {
+            if (server != null)
+                server.closeConnection();
         }
     }
+
 
     private Object[] retrieveDataFromDb() throws SQLException {
         Object[] objects = new Object[3];

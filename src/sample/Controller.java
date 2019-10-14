@@ -4,24 +4,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import project_classes.Customer;
 import project_classes.Rental;
 import project_classes.Vehicle;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -65,6 +58,9 @@ public class Controller implements Initializable {
     private GridPane pnReturnVehicle;
 
     @FXML
+    private GridPane pnAddCustomerFields;
+
+    @FXML
     private Button addCustomerBtn;
 
     // Add Customer Stage variable
@@ -72,7 +68,7 @@ public class Controller implements Initializable {
     private Button saveNewCustomer;
 
     @FXML
-    private Button closeAddCustomerStage;
+    private Button cancelAddCustomerStage;
 
     @FXML
     private Button closeIcon;
@@ -178,14 +174,12 @@ public class Controller implements Initializable {
 
     private Client client;
 
-    public Controller() {
-        // initializing the client side
-        client = new Client("localhost", 8085);
-
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // initializing the client side
+        client = new Client("localhost", 8085);
+        client.runClient();
+
         // customers tableview
         customerNumber.setCellValueFactory(new PropertyValueFactory<>("IdNum"));
         customerFirstname.setCellValueFactory(new PropertyValueFactory<>("Name"));
@@ -259,18 +253,9 @@ public class Controller implements Initializable {
 
     @FXML
     protected void handleAddCustomer(ActionEvent event) {
-        Stage addCustomerStage = new Stage();
-        Parent root = null;
+
         if (event.getSource() == addCustomerBtn) {
-            try {
-                root = FXMLLoader.load(getClass().getResource("layouts/add_customer_activity.fxml"));
-                addCustomerStage.initStyle(StageStyle.UNDECORATED);
-                addCustomerStage.setScene(new Scene(root));
-                addCustomerStage.initModality(Modality.APPLICATION_MODAL);
-                addCustomerStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            managePaneVisibility(pnAddCustomerFields);
         } else if (event.getSource() == saveNewCustomer) {
             /*
              * *****************
@@ -299,15 +284,15 @@ public class Controller implements Initializable {
             alert.setContentText(response);
 
             alert.showAndWait();
-        } else if (event.getSource() == closeAddCustomerStage) {
-            ((Node) event.getSource()).getScene().getWindow().hide();
+        } else if (event.getSource() == cancelAddCustomerStage) {
+            managePaneVisibility(pnAddCustomers);
         } else if (event.getSource() == closeIcon) {
             ((Node) event.getSource()).getScene().getWindow().hide();
         }
     }
 
     private void managePaneVisibility(Pane pane) {
-        Pane[] panes = {pnAddCustomers, pnAllRentals, pnAddVehicle, pnRentVehicle, pnReturnVehicle};
+        Pane[] panes = {pnAddCustomers, pnAllRentals, pnAddVehicle, pnRentVehicle, pnReturnVehicle, pnAddCustomerFields};
         for (Pane cpane : panes) {
             if (pane.equals(cpane)) {
                 cpane.setVisible(true);
