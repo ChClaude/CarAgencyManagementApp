@@ -40,6 +40,8 @@ public class Client {
         return (List<Customer>) data[0];
     }
 
+//    void setCustomers() {}
+
     List<Vehicle> getVehicles() {
         return (List<Vehicle>) data[1];
     }
@@ -48,15 +50,17 @@ public class Client {
         return (List<Rental>) data[2];
     }
 
-    String writeCustomerToServer(Customer customer) {
-        String response = "";
+    public String writeCustomerToServer(Customer customer) {
+        String response = "response";
         try (Socket client = new Socket(serverName, port)) {
             ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
             out.writeObject(customer);
 
             ObjectInputStream in = new ObjectInputStream(client.getInputStream());
             do {
-                response = (String) in.readObject();
+                if (in.readObject() instanceof String)
+                    response =  (String) in.readObject();
+
             } while (!(response.equals("Customer added") || response.equals("An error occurred while adding customer")));
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

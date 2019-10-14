@@ -1,16 +1,18 @@
 package project_classes;
 
-public class Rental {
+import java.io.Serializable;
+
+public class Rental implements Serializable {
 
     private int rentalNumber;
     private String dateRental;
     private String dateReturned;
     private double pricePerDay;
     private double totalRental;
-    private int custNumber;
-    private int vehNumber;
+    private String custNumber;
+    private String vehNumber;
 
-    public Rental(int rentalNumber, String dateRental, String dateReturned, double pricePerDay, double totalRental, int custNumber, int vehNumber) {
+    public Rental(int rentalNumber, String dateRental, String dateReturned, double pricePerDay, double totalRental, String custNumber, String vehNumber) {
         this.rentalNumber = rentalNumber;
         this.dateRental = dateRental;
         this.dateReturned = dateReturned;
@@ -60,26 +62,26 @@ public class Rental {
         this.totalRental = totalRental;
     }
 
-    public int getCustNumber() {
+    public String getCustNumber() {
         return custNumber;
     }
 
-    public void setCustNumber(int custNumber) {
+    public void setCustNumber(String custNumber) {
         this.custNumber = custNumber;
     }
 
-    public int getVehNumber() {
+    public String getVehNumber() {
         return vehNumber;
     }
 
-    public void setVehNumber(int vehNumber) {
+    public void setVehNumber(String vehNumber) {
         this.vehNumber = vehNumber;
     }
 
     @Override
     public String toString() {
         return String.format("Rental = {rental number: %d, date rental: %s, date returned: %s," +
-                "price per day: %.2f, total rental: %.2f, customer number: %d, vehicle number: %d}",
+                "price per day: %.2f, total rental: %.2f, customer number: %s, vehicle number: %s}",
                 rentalNumber, dateRental, dateReturned, pricePerDay, totalRental, custNumber, vehNumber);
     }
 }

@@ -94,10 +94,10 @@ public class Controller implements Initializable {
 
 
     /*
-    *************************
-    * CUSTOMER TABLE SET UP *
-    * ***********************
-    * */
+     *************************
+     * CUSTOMER TABLE SET UP *
+     * ***********************
+     * */
     @FXML
     private TableView<Customer> customerTableView;
 
@@ -118,37 +118,102 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<Customer, String> customerCanRent;
 
+    /*
+     *************************
+     * VEHICLE TABLE SET UP *
+     * ***********************
+     * */
+    @FXML
+    private TableView<Vehicle> vehicleTableView;
+
+    @FXML
+    private TableColumn<Vehicle, String> vehNumberCol;
+
+    @FXML
+    private TableColumn<Vehicle, String> vehMakeCol;
+
+    @FXML
+    private TableColumn<Vehicle, String> vehCatCol;
+
+    @FXML
+    private TableColumn<Vehicle, Double> vehRentPriceCol;
+
+    @FXML
+    private TableColumn<Vehicle, String> vehAvailCol;
+
+    private ObservableList<Vehicle> vehicleCollection;
+
+
+    /*
+     *************************
+     * RENTAL TABLE SET UP *
+     * ***********************
+     * */
+    @FXML
+    private TableView<Rental> rentalsTable;
+
+    @FXML
+    private TableColumn<Vehicle, Integer> rentalNumCol;
+
+    @FXML
+    private TableColumn<Vehicle, String> rentalDateCol;
+
+    @FXML
+    private TableColumn<Vehicle, String> rentalReturnDateCol;
+
+    @FXML
+    private TableColumn<Vehicle, Double> rentalDailyPriceCol;
+
+    @FXML
+    private TableColumn<Vehicle, String> rentalCustCol;
+
+    @FXML
+    private TableColumn<Vehicle, String> rentalVehCol;
+
+    @FXML
+    private TableColumn<Rental, Double> rentalTotalCol;
+
+    private ObservableList<Rental> rentalCollection;
+
+
     private Client client;
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public Controller() {
         // initializing the client side
         client = new Client("localhost", 8085);
 
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         // customers tableview
         customerNumber.setCellValueFactory(new PropertyValueFactory<>("IdNum"));
         customerFirstname.setCellValueFactory(new PropertyValueFactory<>("Name"));
         customerSurname.setCellValueFactory(new PropertyValueFactory<>("Surname"));
         customerPhone.setCellValueFactory(new PropertyValueFactory<>("PhoneNum"));
-        customerCanRent.setCellValueFactory(new PropertyValueFactory<>("CanRent"));
+        customerCanRent.setCellValueFactory(new PropertyValueFactory<>("canRent"));
         customerCollection = FXCollections.observableArrayList(client.getCustomers());
         customerTableView.setItems(customerCollection);
 
-        System.out.println("-------------CUSTOMERS");
-        for (Customer customer : client.getCustomers()) {
-            System.out.println(customer);
-        }
+        // vehicles tableview
+        vehNumberCol.setCellValueFactory(new PropertyValueFactory<>("VehNumber"));
+        vehMakeCol.setCellValueFactory(new PropertyValueFactory<>("Make"));
+        vehCatCol.setCellValueFactory(new PropertyValueFactory<>("Category"));
+        vehRentPriceCol.setCellValueFactory(new PropertyValueFactory<>("RentalPrice"));
+        vehAvailCol.setCellValueFactory(new PropertyValueFactory<>("AvailableForRent"));
+        vehicleCollection = FXCollections.observableArrayList(client.getVehicles());
+        vehicleTableView.setItems(vehicleCollection);
 
-        /*System.out.println("-------------VEHICLES");
-        for (Vehicle vehicle : client.getVehicles()) {
-            System.out.println(vehicle);
-        }
-
-        System.out.println("-------------RENTALS");
-        for (Rental rental : client.getRentals()) {
-            System.out.println(rental);
-        }*/
+        // rentals tableview
+        rentalNumCol.setCellValueFactory(new PropertyValueFactory<>("RentalNumber"));
+        rentalDateCol.setCellValueFactory(new PropertyValueFactory<>("DateRental"));
+        rentalReturnDateCol.setCellValueFactory(new PropertyValueFactory<>("DateReturned"));
+        rentalDailyPriceCol.setCellValueFactory(new PropertyValueFactory<>("PricePerDay"));
+        rentalCustCol.setCellValueFactory(new PropertyValueFactory<>("CustNumber"));
+        rentalVehCol.setCellValueFactory(new PropertyValueFactory<>("VehNumber"));
+        rentalTotalCol.setCellValueFactory(new PropertyValueFactory<>("TotalRental"));
+        rentalCollection = FXCollections.observableArrayList(client.getRentals());
+        rentalsTable.setItems(rentalCollection);
     }
 
     @FXML
@@ -168,10 +233,10 @@ public class Controller implements Initializable {
             managePaneVisibility(pnAddVehicle);
         } else if (event.getSource() == btnRentVehicle) {
             /*
-            * ****************
-            *   RENT VEHICLE *
-            * ****************
-            * */
+             * ****************
+             *   RENT VEHICLE *
+             * ****************
+             * */
             labelStatus.setText("Rentals");
             status.setBackground(new Background(new BackgroundFill(Color.rgb(44, 99, 63),
                     CornerRadii.EMPTY, Insets.EMPTY)));
@@ -193,7 +258,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    void handleAddCustomer(ActionEvent event) {
+    protected void handleAddCustomer(ActionEvent event) {
         Stage addCustomerStage = new Stage();
         Parent root = null;
         if (event.getSource() == addCustomerBtn) {
@@ -202,7 +267,7 @@ public class Controller implements Initializable {
                 addCustomerStage.initStyle(StageStyle.UNDECORATED);
                 addCustomerStage.setScene(new Scene(root));
                 addCustomerStage.initModality(Modality.APPLICATION_MODAL);
-                addCustomerStage.showAndWait();
+                addCustomerStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
             }

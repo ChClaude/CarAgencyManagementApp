@@ -75,7 +75,7 @@ public class Customer implements Serializable
         return idNum;
     }
 
-    public boolean canRent()
+    public boolean getCanRent()
     {
         return canRent;
     }
@@ -83,6 +83,6 @@ public class Customer implements Serializable
     public String toString()
     {
         return String.format("%-15s\t%-15s\t%-15s\t%-15s\t%-10s", getName(), getSurname(),
-                getIdNum(),getPhoneNum(), new Boolean(canRent()).toString());
+                getIdNum(),getPhoneNum(), new Boolean(getCanRent()).toString());
     }      
 }

@@ -40,3 +40,5 @@ V
 &src/sample/layouts/vehicle_picker.fxml,e\d\edd4fa0c2a780dbb74a8f82bd71091fbdf451ce1
 ]
 -src/sample/layouts/add_customer_activity.fxml,9\0\90808379d49dec69f838dc973dc632eb513dd418
+a
+1src/sample/controllers/AddCustomerController.java,f\b\fb514c27328a70985084d75f01214e4b490c78ca

@@ -48,10 +48,13 @@ public class Server extends Thread {
                 if (object instanceof Customer) {
                     Customer customer = (Customer) object;
                     boolean isInserted = insertCustomerToDb(conn.createStatement(), customer);
-                    if (isInserted)
+                    if (isInserted) {
                         out.writeObject("Customer added");
-                    else
+                    }
+                    else {
+                        out.flush();
                         out.writeObject("An error occurred while adding customer");
+                    }
                 } else {
                     System.out.println(object);
                 }
@@ -85,7 +88,7 @@ public class Server extends Thread {
         ResultSet vehResults = statement.executeQuery("SELECT * FROM VEHICLES");
         while (vehResults.next()) {
             Vehicle vehicle = new Vehicle(vehResults.getInt("vehNumber"), vehResults.getString("make"),
-                    vehResults.getString("category").equals("Sedan") ? 1 : 0,
+                    vehResults.getString("category").equals("Sedan") ? 1 : 2,
                     vehResults.getDouble("rentalPrice"), vehResults.getBoolean("availableForRent"));
             vehicles.add(vehicle);
         }
@@ -94,8 +97,8 @@ public class Server extends Thread {
         while (rentResults.next()) {
             Rental rental = new Rental(rentResults.getInt("rentalNumber"), rentResults.getString("dateRental"),
                     rentResults.getString("dateReturned"), rentResults.getDouble("pricePerDay"),
-                    rentResults.getDouble("pricePerDay"), rentResults.getInt("custNumber"),
-                    rentResults.getInt("vehNumber"));
+                    rentResults.getDouble("pricePerDay"), rentResults.getString("custNumber"),
+                    rentResults.getString("vehNumber"));
             rentals.add(rental);
         }
 
@@ -183,7 +186,7 @@ public class Server extends Thread {
         if (index.equals("")) {
             statement.executeUpdate("INSERT INTO CUSTOMERS " +
                     "VALUES('" + customer.getIdNum() + "', '" + customer.getName() + "', '" + customer.getSurname() + "', '"
-                    + customer.getPhoneNum() + "', " + customer.canRent() + ")");
+                    + customer.getPhoneNum() + "', " + customer.getCanRent() + ")");
             return true;
         }
 
